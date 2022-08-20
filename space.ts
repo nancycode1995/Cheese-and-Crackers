@@ -10,7 +10,7 @@ export abstract class Space<T> {
     /**
      * Iterate each point in the space.
      */
-    abstract get points(): Generator<T, void, undefined>;
+    abstract points(): IterableIterator<T>;
 }
 
 /**
@@ -31,12 +31,24 @@ export class Dimension<T> extends Space<T> {
         return this._points.length;
     }
 
-    get points(): Generator<T, void, undefined> {
-        return (function *(points) {
-            yield *points;
-        })(this._points);
+    *points() {
+        yield *this._points;
     }
 }
+
+/**
+ * Unit dimension.
+ */
+export class Unit<T> extends Dimension<T[]> {
+    constructor() {
+        super(<T[][]>[[]]);
+    }
+}
+
+/**
+ * Recursive type.
+ */
+type Exponent<T> = T[] | [T, Exponent<T>];
 
 /**
  * A product of spaces.
@@ -54,15 +66,20 @@ export class Product<A, B> extends Space<[A, B]> {
         this.b = b;
     }
 
+    static exponent<T>(space: Space<T>, degree: number): Space<Exponent<T>> {
+        if (degree == 0)
+            return new Unit<T>();
+        else
+            return new Product<T, Exponent<T>>(space, this.exponent(space, degree - 1));
+    }
+
     get length(): number {
         return this.a.length * this.b.length;
     }
 
-    get points(): Generator<[A, B], void, undefined> {
-        return (function *(a, b) {
-            for (let x of a)
-                for (let y of b)
-                    yield [x, y];
-        })(this.a.points, this.b.points);
+    *points(): Generator<[A, B], void, unknown> {
+        for (let x of this.a.points())
+            for (let y of this.b.points())
+                yield [x, y];
     }
 }

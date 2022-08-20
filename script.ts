@@ -32,6 +32,10 @@ window.addEventListener("load", async event => {
     const board = Board.withDimension(3);
 
     // Test.
+    for (let point of board.space.points())
+        console.log(point);
+
+    // Test.
     board.setCell(0, 0, Cell.Cheese);
     board.setCell(1, 0, Cell.Crackers);
 

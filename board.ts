@@ -2,6 +2,7 @@
  * Imports.
  */
 import { GraphicsConfiguration } from "./graphics-configuration.js";
+import { Space, Dimension, Product } from "./space.js";
 
 /**
  * Possible states for each cell on the board.
@@ -10,6 +11,18 @@ export enum Cell {
     Empty = 0,
     Cheese,
     Crackers,
+}
+
+/**
+ * Dimension representing cell states.
+ */
+const cellSpace = new Dimension<Cell>([Cell.Empty, Cell.Cheese, Cell.Crackers]);
+
+/**
+ * Get a space representing an N by N board.
+ */
+function makeBoardSpace(n: number) {
+    return Product.exponent(cellSpace, 0);
 }
 
 /**
@@ -27,6 +40,10 @@ export class Board {
     static withDimension(dimension: number) {
         const cells = (new Array(dimension * dimension)).fill(Cell.Empty);
         return new this(cells, dimension);
+    }
+
+    get space() {
+        return makeBoardSpace(this.dimension);
     }
 
     getCell(x: number, y: number): Cell {
