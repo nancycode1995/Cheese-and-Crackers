@@ -1,5 +1,5 @@
 /**
- * Board position states.
+ * Possible states for each cell on the board.
  */
 enum Cell {
     Empty,

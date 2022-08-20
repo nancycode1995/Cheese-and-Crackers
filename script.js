@@ -17,6 +17,12 @@ class Board {
         const cells = (new Array(dimension * dimension)).fill(Cell.Empty);
         return new this(cells, dimension);
     }
+    getCell(x, y) {
+        return this.cells[x + y * this.dimension];
+    }
+    setCell(x, y, cell) {
+        this.cells[x + y * this.dimension] = cell;
+    }
 }
 window.onload = function () {
     alert("Hi");
