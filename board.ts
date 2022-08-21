@@ -2,7 +2,7 @@
  * Imports.
  */
 import { GraphicsConfiguration } from "./graphics-configuration.js";
-import { Space, Dimension, Product } from "./space.js";
+import { Space, Dimension, Exponent, Product } from "./space.js";
 
 /**
  * Possible states for each cell on the board.
@@ -22,7 +22,7 @@ const cellSpace = new Dimension<Cell>([Cell.Empty, Cell.Cheese, Cell.Crackers]);
  * Get a space representing an N by N board.
  */
 function makeBoardSpace(n: number) {
-    return Product.exponent(cellSpace, 0);
+    return Product.exponent(cellSpace, n * n);
 }
 
 /**
@@ -44,6 +44,14 @@ export class Board {
 
     get space() {
         return makeBoardSpace(this.dimension);
+    }
+
+    set state(point: Exponent<Cell>) {
+        for (let i = 0; point.length; i++) {
+            const [value, rest] = point;
+            this.cells[i] = value;
+            point = rest as Exponent<Cell>;
+        }
     }
 
     getCell(x: number, y: number): Cell {

@@ -30,15 +30,16 @@ window.addEventListener("load", async event => {
 
     // Create a new 3x3 board.
     const board = Board.withDimension(3);
+    
+    // Iterate through every possible board state.
+    const points = board.space.points();
+    function animate() {
+        // Set the board state to that described by the next point.
+        board.state = points.next().value;
 
-    // Test.
-    for (let point of board.space.points())
-        console.log(point);
-
-    // Test.
-    board.setCell(0, 0, Cell.Cheese);
-    board.setCell(1, 0, Cell.Crackers);
-
-    // Display the board on screen.
-    drawBoard(board, configuration);
+        // Display the board on screen.
+        drawBoard(board, configuration);
+        window.requestAnimationFrame(animate);
+    }
+    animate();
 });

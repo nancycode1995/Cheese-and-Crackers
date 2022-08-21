@@ -48,7 +48,7 @@ export class Unit<T> extends Dimension<T[]> {
 /**
  * Recursive type.
  */
-type Exponent<T> = T[] | [T, Exponent<T>];
+export type Exponent<T> = T[] | [T, Exponent<T>];
 
 /**
  * A product of spaces.
