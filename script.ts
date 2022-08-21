@@ -5,17 +5,36 @@ import { Cell, Board } from "./board.js";
 import { GraphicsConfiguration } from "./graphics-configuration.js";
 
 /**
- * Get the canvas element that displays the game board.
+ * Global state.
  */
-function getCanvas() {
-    return document.getElementById("canvas") as HTMLCanvasElement;
+let board: Board;
+let configuration: GraphicsConfiguration;
+
+/**
+ * Draw the current board state and available choice.
+ */
+function draw() {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const choices = document.getElementById("choices") as HTMLDivElement;
+    board.draw(canvas, configuration);
+    choices.replaceChildren(...[...board.choices].map((choice: Board): HTMLCanvasElement => {
+        const canvas = document.createElement("canvas") as HTMLCanvasElement;
+        canvas.onclick = (event) => {
+            board = choice;
+            draw();
+        }
+        choice.draw(canvas, configuration, true);
+        return canvas;
+    }))
 }
 
 /**
- * Draw a board state on screen.
+ * Initialize a game.
  */
-function drawBoard(board: Board, configuration: GraphicsConfiguration) {
-    board.draw(getCanvas(), configuration);
+function startGame(dimension: number = 3) {
+    // Create a new 3x3 board and draw it.
+    board = Board.withDimension(dimension);
+    draw();
 }
 
 /**
@@ -23,23 +42,11 @@ function drawBoard(board: Board, configuration: GraphicsConfiguration) {
  */
 window.addEventListener("load", async event => {
     // Setup graphics configuration and pre-load images.
-    const configuration = new GraphicsConfiguration();
+    configuration = new GraphicsConfiguration();
     console.log("Waiting for images to load...");
     await configuration.loadImages();
     console.log("Images have been loaded.");
 
-    // Create a new 3x3 board.
-    const board = Board.withDimension(3);
-    
-    // Iterate through every possible board state.
-    const points = board.space.points();
-    function animate() {
-        // Set the board state to that described by the next point.
-        board.state = points.next().value;
-
-        // Display the board on screen.
-        drawBoard(board, configuration);
-        window.requestAnimationFrame(animate);
-    }
-    animate();
+    // Start a new game.
+    startGame();
 });

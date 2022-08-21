@@ -3,6 +3,8 @@ export class GraphicsConfiguration {
      * Drawing configuration.
      */
     public cellSize = 48; // Size in pixels of a cell square.
+    public cellSizeSmall = 32; // Size in pixels of a cell square for small boards.
+    public footerSize = 16; // Size in pixels of footer of board.
 
     /**
      * Resource URLs
