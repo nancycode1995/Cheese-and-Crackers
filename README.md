@@ -1,6 +1,12 @@
-# Cheese-and-Crackers-AI
+# Cheese and Crackers
 
-N by N tic-tac-toe game against the computer!
+Brute force visualization of Tic-Tac-Toe decision tree.
+
+Current state of game is depicted at the top. Possible next moves are shown below. Click a next move to progress.
+
+Green bar indicates chances of winning, gray bar indicates chances of tying, and red bar indicates chances of losing.
+
+![Screenshot](screenshot.png)
 
 ## Compile
 
@@ -16,4 +22,4 @@ Run a test web server, for example:
 python -m http.server
 ```
 
-And then navigate in your browser to `https://localhost:8000/`
+And then navigate in your browser to `http://localhost:8000/`
